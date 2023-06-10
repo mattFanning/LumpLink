@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+}
+
+div.popup-body-div {
+  display: flex;
+  flex-direction: column;
+  
+  /* align-items: center;
+  justify-content: center; */
+  
+  height: inherit;
+  width: initial;
+  
+  background-color: tomato;
+  border: 2px solid black;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+  
+  text-align: center;
+  vertical-align:middle;
+
+  z-index: 99999999; 
+}
+
+h1.message-text {
+  color: blue;
+  
+}
+
+hgroup.popup-info-hgroup {
+  border-bottom: 1px solid black;
+}
+
+
+ul.color-picker-list {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+
+  padding: 0;
+}
+
+li.color-picker-li {
+  list-style-type: none;
+}
+
+input.color-button {
+  width: 30px;
+  height: 30px;
+}
+
+input.red {
+  background-color: rgba(255,0,0,0.6);
+}
+input.green {
+  background-color: rgba(0,255,0,0.6);
+}
+input.blue {
+  background-color: rgba(0,0,255,0.6);
+}
+
+input.execute-button {
+  width: 90px;
+  height: 30px;
+}

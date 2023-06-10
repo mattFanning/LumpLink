@@ -1,0 +1,32 @@
+{
+  "name": "lump link",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "./background/serviceWorker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./contentScript/content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "contentScript/arrow.png", "contentScript/arrow2.png", 
+        "contentScript/arrow3.png", "contentScript/arrow4.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "commands": {
+    "_execute_action": {}
+  },
+  "action": {
+    "default_popup": "./popup/popup.html"
+  }
+}

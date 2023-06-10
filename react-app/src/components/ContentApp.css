@@ -1,0 +1,23 @@
+body {
+    --cursorVal: pointer;
+}
+
+.lumplink-selector {
+    display: flex;
+    position: absolute;
+    
+    border: 2px solid black;
+    /* box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px; */
+    box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 30px 3px;
+    background-color: rgba(0, 0, 0, 0.56);
+    
+    z-index: 999999;
+}
+    
+.lumplink-active {
+    cursor: var(--cursorVal), default;
+}
+
+.lumplink-active :hover {
+    cursor: var(--cursorVal), pointer;
+}
