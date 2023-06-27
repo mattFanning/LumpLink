@@ -14,8 +14,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "contentScript/arrow.png", "contentScript/arrow2.png", 
-        "contentScript/arrow3.png", "contentScript/arrow4.png"
+        "cursors/arrow.png", "cursors/arrow2.png", 
+        "cursors/arrow3.png", "cursors/arrow4.png"
       ],
       "matches": ["<all_urls>"]
     }

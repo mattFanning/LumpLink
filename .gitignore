@@ -12,11 +12,11 @@
 .env.development.local
 .env.test.local
 .env.production.local
-
 /.vscode
+scratchpad.*
 
 #webpack-generated
-/extension/contentScript/*.png
+/extension/cursors/
 /extension/contentScript/content.js*
 /extension/popup/popup.js*
 

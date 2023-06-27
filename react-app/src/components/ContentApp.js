@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import './ContentApp.css';
 
 function ContentApp() {
   //states
   const [activated, setActivated] = useState(false);
+  const [color, setColor] = useState("");
   const [mouse, setMouse] = useState({
     state: ""  //"Mouse Down", "Mouse Up"
   });
@@ -14,6 +15,8 @@ function ContentApp() {
     endY: 0
   });
 
+  const CURSORS = useRef("/cursors");
+  const cursorPath = () => {return CURSORS.current};
 
   //useCallback
   const processSelection = useCallback(() => {
@@ -37,7 +40,12 @@ function ContentApp() {
     });
     console.log(`%c]`, "color:green");
 
-    //TODO: send link array to background for handling.
+    /* eslint-disable */
+      //This code will only make sense to the chrome extension after webpacking.
+      const selectedURIs = selectedLinks.map(l => l.href);
+      chrome.runtime.sendMessage({ message: "openLinks", args: selectedURIs});
+    /* eslint-enable */
+    
   },[]);
 
   const mouseHandler = useCallback((event) => {
@@ -70,24 +78,38 @@ function ContentApp() {
 
 
   //useEffect's
+  
+  /*
+    Handles chrome.storage.local
+  */
   useEffect(() => {
     //componentDidMount
     
-    //This code will only make sense to the chrome extension after webpacking.
     /* eslint-disable */
+      //This code will only make sense to the chrome extension after webpacking.
       chrome.storage.local.get("activated", result => {
         setActivated(result.activated);
       });
 
+      chrome.storage.local.get("color", result => {
+        setColor(result.color);
+      });
+
       chrome.storage.onChanged.addListener((changes, areaName)=> {  //changes: object, areaName: string
         if(changes.activated) {
-          //console.log(`CS picked up activated update of: %c${changes.activated.newValue}`, "color:green");
           setActivated(changes.activated.newValue);
+        }
+
+        if(changes.color) {
+          setColor(changes.color.newValue);
         }
       });
     /* eslint-enable */
   }, []);
 
+  /*
+    Mouse Handlers
+  */
   useEffect(() => {
     //componentDidMount/Update
     document.body.addEventListener("mousedown", mouseHandler);
@@ -101,13 +123,14 @@ function ContentApp() {
     }  
   }, [mouseHandler]);
 
+  //activated update
   useEffect(() => {
     if(activated) {
-      //This code will only make sense to the chrome extension after webpacking.
       /* eslint-disable */
-        chrome.runtime.sendMessage({ message: "getURL", args: ['/contentScript/arrow4.png'] }, (path) => {
-          const cursorPath = `url(${path})`;
-          document.body.style.setProperty("--cursorVal", cursorPath);
+        //This code will only make sense to the chrome extension after webpacking.
+        chrome.runtime.sendMessage({ message: "getURL", args: [`${cursorPath()}/arrow4.png`] }, (path) => {
+          const resourcePath = `url(${path})`;
+          document.body.style.setProperty("--cursorVal", resourcePath);
           document.body.classList.add('lumplink-active');
         });
       /* eslint-enable */
@@ -117,6 +140,10 @@ function ContentApp() {
     }
   }, [activated]);
 
+  //color update
+  useEffect(() => {  
+    document.body.style.setProperty("--color", color);
+  }, [color]);
 
   //helpers
   const boundingRectContainsElement = (rect, elem) => {
