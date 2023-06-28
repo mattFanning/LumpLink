@@ -18,7 +18,7 @@ scratchpad.*
 #webpack-generated
 /extension/cursors/
 /extension/contentScript/content.js*
-/extension/popup/popup.js*
+/extension/popup/popup.*
 
 /react-app/src/tools/
 

@@ -1,20 +1,7 @@
-<style>
-  .b {border: 1px solid white;}
-  .g {color: green}
-</style>
+<b><u>Note:</u></b> Most of the files for this folder are <b>generated</b> from running the react-app's webpack.
 
-
-<div >
-
-<b><u>Note:</u></b> Half the contents for this folder are <g class="g">generated</g> from running the react-app's webpack.
-<div>
-
-<div class="b">
-
-<b>Expected Contents aferward:</b>
-* popup.css
-* popup.html
-* <g class="g">popup.js</g>
-* <g class="g">popup.js.LICENSE.txt</g>
+Expected Contents aferward:
+* <b>popup.html</b>
+* <b>popup.js</b>
+* <b>popup.js.LICENSE.txt</b>
 * README.md
-</div>
