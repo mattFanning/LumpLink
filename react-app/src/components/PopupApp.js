@@ -40,23 +40,42 @@ function PopupApp() {
     }
   }
 
+  //sub components
+  function ColorSelectionList() {
+    return (
+      <div class="popup-group-div">
+        <p class="popup-p">pick selection box color</p>
+        <ul class="popup-list">
+          <li class="popup-li"><input type="button" class="color-button red" onClick={() => update({color: "--red"})}></input></li>
+          <li class="popup-li"><input type="button" class="color-button green" onClick={() => update({color: "--green"})}></input></li>
+          <li class="popup-li"><input type="button" class="color-button blue" onClick={() => update({color: "--blue"})}></input></li>
+          <li class="popup-li"><input type="button" class="color-button black" onClick={() => update({color: "--black"})}></input></li>
+          {/* <li class="popup-li"><input type="color" class="color-button"value="#000000" onClick={() => update({color: "#000000"})}></input></li> */}
+        </ul>
+      </div>
+    );
+  }
+
+  function ActivationList() {
+    return (
+      <div class="popup-group-div">
+        <p class="popup-p">click <b>activate</b> or <b>deactivate</b></p>
+        <ul class="popup-list">
+          <li class="popup-li"><input type="button" class="execute-button" value="activate" onClick={() => activate(true)}></input></li>
+          <li class="popup-li"><input type="button" class="execute-button" value="deactivate" onClick={() => activate(false)}></input></li>
+        </ul>  
+      </div>
+    );
+  }
+
   return (
     <div className="popup-body-div">
       <hgroup class="popup-info-hgroup">
-	      <h1>LumpLink!</h1>
-	      <p>pick color and press <b>activate</b></p>
+	      <h1 class="popup-title">LumpLink!</h1>
       </hgroup>
-      <ul class="color-picker-list">
-        <li class="color-picker-li"><input type="button" class="color-button red" onClick={() => update({color: "--red"})}></input></li>
-        <li class="color-picker-li"><input type="button" class="color-button green" onClick={() => update({color: "--green"})}></input></li>
-        <li class="color-picker-li"><input type="button" class="color-button blue" onClick={() => update({color: "--blue"})}></input></li>
-        <li class="color-picker-li"><input type="button" class="color-button black" onClick={() => update({color: "--black"})}></input></li>
-        {/* <li class="color-picker-li"><input type="color" class="color-button"value="#000000" onClick={() => update({color: "#000000"})}></input></li> */}
-      </ul>
-      <ul class="color-picker-list">
-        <li class="color-picker-li"><input type="button" class="execute-button" value="activate" onClick={() => activate(true)}></input></li>
-        <li class="color-picker-li"><input type="button" class="execute-button" value="deactivate" onClick={() => activate(false)}></input></li>
-      </ul>  
+      <ColorSelectionList></ColorSelectionList>
+      <hr class="popup-hr"></hr>
+      <ActivationList></ActivationList>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 const path = require("path");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = [
   {
@@ -25,6 +26,13 @@ module.exports = [
         },
       ],
     },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: 'src/popup.html',
+        filename: '../popup/popup.html',
+        inject: false
+    })
+    ],
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
     },

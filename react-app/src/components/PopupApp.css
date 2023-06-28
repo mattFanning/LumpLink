@@ -1,57 +1,93 @@
 body {
-  margin: 0;
+  display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height : 175px;
+    width: 200px;
+    margin: 0;
 
   --blue: rgba(0,0,255,0.6);
   --green: rgba(0,255,0,0.6);
   --red: rgba(255,0,0,0.6);
   --black: rgba(0, 0, 0, 0.6);
+  --white: rgba(255,255,255, 1);
+  --gold: rgb(255,223, 0);
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body.lumplink-active {
+    cursor: var(--cursorVal), default;
+}
+
+body.lumplink-active :hover {
+    cursor: var(--cursorVal), pointer;
 }
 
 div.popup-body-div {
   display: flex;
   flex-direction: column;
   
-  /* align-items: center;
-  justify-content: center; */
-  
   height: inherit;
   width: initial;
   
-  background-color: tomato;
-  border: 2px solid black;
+  background-color: whitesmoke;
+  border: 3px solid var(--blue);
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
   
-  text-align: center;
   vertical-align:middle;
 
   z-index: 99999999; 
 }
 
-h1.message-text {
-  color: blue;
-  
+h1.popup-title {
+  color: var(--white);
+  text-align: center;
 }
 
 hgroup.popup-info-hgroup {
-  border-bottom: 1px solid black;
+  background-color: rgba(0,0,255, 0.6)
 }
 
+div.popup-group-div {
+  display: flex;
+  flex-direction: column;
+  padding-left: 5px;
+  padding-right: 5px;
+}
 
-ul.color-picker-list {
+hr.popup-hr {
+  background-color: rgba(0,0,255, 0.6);
+  width: 100%;
+  height: 5px;
+  margin: 0;
+  border: 0;
+}
+
+p.popup-p {
+  margin: 0;
+}
+
+ul.popup-list {
   display: flex;
   flex-direction: row;
   align-self: center;
 
   padding: 0;
+  margin: 0;
+  gap: 5px;
 }
 
-li.color-picker-li {
+li.popup-li {
   list-style-type: none;
 }
 
 input.color-button {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 }
 
 input.red {
