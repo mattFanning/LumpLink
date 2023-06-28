@@ -1,4 +1,4 @@
-<b><u>Note:</u></b> The contents of this file are <b>generated</b> from running the react-app's webpack.
+<b><u>Note:</u></b> The files for this folder are <b>generated</b> from running the react-app's webpack.
 
 Expected Contents aferward:
 * <b>arrow1.png</b>

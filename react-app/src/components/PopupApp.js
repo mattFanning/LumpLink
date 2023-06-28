@@ -4,70 +4,134 @@ import './PopupApp.css';
 function PopupApp() {
   //state
   const [isActive, setIsActive] = useState(false);
+  const [colorInfo, setColorInfo] = useState({id: "red_btn", color: "rgba(255,0,0,0.6)"});
 
   const CURSORS = useRef("/cursors");
   const cursorPath = () => {return CURSORS.current};
   
-  //Initial setup of isActive.
-  useEffect(()=>{
+  /*
+   * Initial setup from chrome.storage.local
+   */
+  useEffect(()=> {
     /* eslint-disable */
       //This code will only make sense to the chrome extension after webpacking.
       chrome.storage.local.get("activated", result => {setIsActive(result.activated)});
+      chrome.storage.local.get("colorInfo", result => {setColorInfo(result.colorInfo)});
     /* eslint-enable */
-  });
-  
-  //OnClick Handlers
-  async function activate(state) {
+  }, []);
+
+  /**
+   * isActive useEffect - updates storage.
+   */
+  useEffect(()=> {
     /* eslint-disable */
       //This code will only make sense to the chrome extension after webpacking.
-      await chrome.storage.local.set({ activated: state });
-      chrome.runtime.sendMessage({ message: "getURL", args: [`${cursorPath()}/arrow4.png`] }, (path) => {
-        const cursorPath = `url(${path})`;
-        document.body.style.setProperty("--cursorVal", cursorPath);
+      chrome.storage.local.set({ activated: isActive });
+      
+      if(isActive) {
+        chrome.runtime.sendMessage({ message: "getURL", args: [`${cursorPath()}/arrow4.png`] }, (path) => {
+          const cursorPath = `url(${path})`;
+          document.body.style.setProperty("--cursorVal", cursorPath);
+        });
         document.body.classList.add('lumplink-active');
-      });
+      }
+      else {
+        document.body.classList.remove('lumplink-active');
+      }
     /* eslint-enable */
+  }, [isActive]);
+  
+  /**
+   * colorInfo useEffect - updates storage.
+   */
+  useEffect(()=> {
+    /* eslint-disable */
+      //This code will only make sense to the chrome extension after webpacking.
+      chrome.storage.local.set({ colorInfo: colorInfo});
+    /* eslint-enable */
+  }, [colorInfo]);
+  
+  /**
+   * OnClick Handlers
+   */
+  async function activate(state) {
+    setIsActive(state);
   }
 
-  async function update(updateObj) {
-    if(updateObj.color) {  
-      const color = getComputedStyle(document.body).getPropertyValue(updateObj.color);
-      console.log(`updating the color to ${color}`);
-      /* eslint-disable */
-        //This code will only make sense to the chrome extension after webpacking.
-        await chrome.storage.local.set({ color: color });
-      /* eslint-enable */
-    }
+  async function update(updateObj) {  
+    const color = getComputedStyle(document.body).getPropertyValue(updateObj.cssColorVar);
+    const colorPayload = {id: updateObj.id, color: color};
+    setColorInfo(colorPayload);
   }
 
-  //sub components
+  /**
+   * sub components
+   */
   function ColorSelectionList() {
     return (
       <div class="popup-group-div">
         <p class="popup-p">pick selection box color</p>
         <ul class="popup-list">
-          <li class="popup-li"><input type="button" class="color-button red" onClick={() => update({color: "--red"})}></input></li>
-          <li class="popup-li"><input type="button" class="color-button green" onClick={() => update({color: "--green"})}></input></li>
-          <li class="popup-li"><input type="button" class="color-button blue" onClick={() => update({color: "--blue"})}></input></li>
-          <li class="popup-li"><input type="button" class="color-button black" onClick={() => update({color: "--black"})}></input></li>
-          {/* <li class="popup-li"><input type="color" class="color-button"value="#000000" onClick={() => update({color: "#000000"})}></input></li> */}
+          <ColorButtonListItem buttonId="red_btn" buttonColorClass="red" cssColorVar="--red"></ColorButtonListItem>
+          <ColorButtonListItem buttonId="green_btn" buttonColorClass="green" cssColorVar="--green"></ColorButtonListItem>
+          <ColorButtonListItem buttonId="blue_btn" buttonColorClass="blue" cssColorVar="--blue"></ColorButtonListItem>
+          <ColorButtonListItem buttonId="black_btn" buttonColorClass="black" cssColorVar="--black"></ColorButtonListItem>
         </ul>
       </div>
     );
   }
 
+  function ColorButtonListItem(props) {
+    const buttonId = props.buttonId;
+    const buttonColorClass = props.buttonColorClass;
+    const cssColorVar = props.cssColorVar;
+    
+    let decorator = "";
+    if(buttonId === colorInfo.id) {
+      decorator = "highlighted";
+    }
+
+    const btnClasses = `color-button ${buttonColorClass} ${decorator}`
+    return (
+      <li class="popup-li">
+          <input id={buttonId} type="button" class={btnClasses} onClick={() => 
+            update({id: buttonId, cssColorVar: cssColorVar})}></input>
+      </li>
+    )
+  }
+
   function ActivationList() {
     return (
       <div class="popup-group-div">
-        <p class="popup-p">click <b>activate</b> or <b>deactivate</b></p>
+        <p class="popup-p">click <b>enabled</b> or <b>disabled</b></p>
         <ul class="popup-list">
-          <li class="popup-li"><input type="button" class="execute-button" value="activate" onClick={() => activate(true)}></input></li>
-          <li class="popup-li"><input type="button" class="execute-button" value="deactivate" onClick={() => activate(false)}></input></li>
+          <ActivationButtonListItem label="enabled" activationValue={true}></ActivationButtonListItem>
+          <ActivationButtonListItem label="disabled" activationValue={false}></ActivationButtonListItem>
         </ul>  
       </div>
     );
   }
 
+  function ActivationButtonListItem(props) {
+    const label = props.label;
+    const activationValue = props.activationValue;
+    let decorator = "";
+    if(props.activationValue === isActive) {
+      decorator = "highlighted";
+    }
+    
+    const btnClasses = `execute-button ${decorator}`;
+    return (
+      <li class="popup-li">
+        <input type="button" class={btnClasses} value={label} onClick={() => 
+          activate(activationValue)}></input>
+      </li>
+    );
+  }
+
+  /**
+   * main component
+   */
   return (
     <div className="popup-body-div">
       <hgroup class="popup-info-hgroup">

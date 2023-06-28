@@ -2,9 +2,11 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import './ContentApp.css';
 
 function ContentApp() {
-  //states
+  /**
+   * useStates
+   */
   const [activated, setActivated] = useState(false);
-  const [color, setColor] = useState("");
+  const [colorInfo, setColorInfo] = useState("");
   const [mouse, setMouse] = useState({
     state: ""  //"Mouse Down", "Mouse Up"
   });
@@ -14,11 +16,13 @@ function ContentApp() {
     endX: 0,
     endY: 0
   });
-
   const CURSORS = useRef("/cursors");
   const cursorPath = () => {return CURSORS.current};
 
-  //useCallback
+
+  /**
+   * useCallbacks
+   */
   const processSelection = useCallback(() => {
     const selector = document.getElementById("lumplink-selector");
     if(selector === null) {
@@ -77,22 +81,18 @@ function ContentApp() {
   },[activated, mouse.state, processSelection, selectionBox]);
 
 
-  //useEffect's
-  
   /*
-    Handles chrome.storage.local
-  */
+   * Initial setup + chrome.storage.local updates
+   */
   useEffect(() => {
-    //componentDidMount
-    
     /* eslint-disable */
       //This code will only make sense to the chrome extension after webpacking.
       chrome.storage.local.get("activated", result => {
         setActivated(result.activated);
       });
 
-      chrome.storage.local.get("color", result => {
-        setColor(result.color);
+      chrome.storage.local.get("colorInfo", result => {
+        setColorInfo(result.colorInfo);
       });
 
       chrome.storage.onChanged.addListener((changes, areaName)=> {  //changes: object, areaName: string
@@ -100,15 +100,15 @@ function ContentApp() {
           setActivated(changes.activated.newValue);
         }
 
-        if(changes.color) {
-          setColor(changes.color.newValue);
+        if(changes.colorInfo) {
+          setColorInfo(changes.colorInfo.newValue);
         }
       });
     /* eslint-enable */
   }, []);
 
   /*
-    Mouse Handlers
+   * Mouse Handlers
   */
   useEffect(() => {
     //componentDidMount/Update
@@ -123,7 +123,9 @@ function ContentApp() {
     }  
   }, [mouseHandler]);
 
-  //activated update
+  /**
+   * activated useEffect 
+   */
   useEffect(() => {
     if(activated) {
       /* eslint-disable */
@@ -132,6 +134,7 @@ function ContentApp() {
           const resourcePath = `url(${path})`;
           document.body.style.setProperty("--cursorVal", resourcePath);
           document.body.classList.add('lumplink-active');
+          console.log("The document got the fucking lumplink activation!");
         });
       /* eslint-enable */
     }
@@ -142,8 +145,8 @@ function ContentApp() {
 
   //color update
   useEffect(() => {  
-    document.body.style.setProperty("--color", color);
-  }, [color]);
+    document.body.style.setProperty("--color", colorInfo.color);
+  }, [colorInfo]);
 
   //helpers
   const boundingRectContainsElement = (rect, elem) => {
