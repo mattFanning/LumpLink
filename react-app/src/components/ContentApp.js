@@ -134,7 +134,6 @@ function ContentApp() {
           const resourcePath = `url(${path})`;
           document.body.style.setProperty("--cursorVal", resourcePath);
           document.body.classList.add('lumplink-active');
-          console.log("The document got the fucking lumplink activation!");
         });
       /* eslint-enable */
     }
